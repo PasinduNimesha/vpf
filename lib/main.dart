@@ -16,7 +16,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final SettingsController settingsController;
 
-  const MyApp({Key? key, required this.settingsController}) : super(key: key);
+  const MyApp({super.key, required this.settingsController});
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +58,8 @@ class MyApp extends StatelessWidget {
 }
 
 class VulnerabilityOverviewPage extends StatefulWidget {
+  const VulnerabilityOverviewPage({super.key});
+
   @override
   _VulnerabilityOverviewPageState createState() => _VulnerabilityOverviewPageState();
 }
@@ -70,7 +72,7 @@ class _VulnerabilityOverviewPageState extends State<VulnerabilityOverviewPage> {
   double? _cvssScore;
   double? _epssScore;
   String? _priority;
-  double? _priorityScore;
+  double _priorityScore = 0;
   double _cvssWeight = 0.6;
   double _epssWeight = 0.4;
   bool _isLoading = false;
@@ -94,10 +96,14 @@ class _VulnerabilityOverviewPageState extends State<VulnerabilityOverviewPage> {
     setState(() => _isLoading = true);
 
     try {
+      print('Fetching data for $cveCode...');
       final cvssResponse = await http.get(Uri.parse('https://cve.circl.lu/api/cve/$cveCode'));
       if (cvssResponse.statusCode != 200) throw Exception('Failed to load CVSS data');
       final cvssData = json.decode(cvssResponse.body);
-      final cvssScore = cvssData['containers']['adp'][0]['metrics'][0]['cvssV3_1']['baseScore'];
+      final cvssScore = cvssData['containers']['cna']?.containsKey('metrics') == false
+          ? cvssData['containers']['adp'][0]['metrics'][0]['cvssV3_1']['baseScore']
+          : (cvssData['containers']['cna']['metrics'][0]['cvssV3_1']['baseScore'] as num).toDouble();
+
 
       final epssResponse = await http.get(Uri.parse('https://api.first.org/data/v1/epss?cve=$cveCode'));
       if (epssResponse.statusCode != 200) throw Exception('Failed to load EPSS data');
@@ -301,9 +307,9 @@ class _VulnerabilityOverviewPageState extends State<VulnerabilityOverviewPage> {
               ],
             ),
             const Divider(height: 30, thickness: 1),
-            _buildResultRow('CVSS Score', '${_cvssScore?.toStringAsFixed(1) ?? '-'}', Icons.speed),
-            _buildResultRow('EPSS Score', '${_epssScore?.toStringAsFixed(3) ?? '-'}', Icons.trending_up),
-            _buildResultRow('Prio Score', '${_priorityScore?.toStringAsFixed(2) ?? '-'}', Icons.score),
+            _buildResultRow('CVSS Score', _cvssScore?.toStringAsFixed(1) ?? '-', Icons.speed),
+            _buildResultRow('EPSS Score', _epssScore?.toStringAsFixed(3) ?? '-', Icons.trending_up),
+            _buildResultRow('Prio Score', _priorityScore?.toStringAsFixed(2) ?? '-', Icons.score),
             _buildResultRow('Severity Level', _severity?.split(': ')[1] ?? '-', Icons.layers),
             const SizedBox(height: 15),
             Container(
