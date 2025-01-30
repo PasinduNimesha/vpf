@@ -309,7 +309,7 @@ class _VulnerabilityOverviewPageState extends State<VulnerabilityOverviewPage> {
             const Divider(height: 30, thickness: 1),
             _buildResultRow('CVSS Score', _cvssScore?.toStringAsFixed(1) ?? '-', Icons.speed),
             _buildResultRow('EPSS Score', _epssScore?.toStringAsFixed(3) ?? '-', Icons.trending_up),
-            _buildResultRow('Prio Score', _priorityScore?.toStringAsFixed(2) ?? '-', Icons.score),
+            _buildResultRow('Priority Score', _priorityScore?.toStringAsFixed(2) ?? '-', Icons.score),
             _buildResultRow('Severity Level', _severity?.split(': ')[1] ?? '-', Icons.layers),
             const SizedBox(height: 15),
             Container(
