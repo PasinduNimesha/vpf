@@ -27,3 +27,4 @@ the `lib/src/localization` directory.
 
 To support additional languages, please visit the tutorial on
 [Internationalizing Flutter apps](https://flutter.dev/to/internationalization).
+https://drive.google.com/drive/folders/1u-zndKU1tPxtDoEZCL-T9O5qMT7b1dq3?usp=sharing
