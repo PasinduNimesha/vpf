@@ -82,4 +82,3 @@ Organizations can:
 
 ## Contributing
 Feel free to submit issues, suggest enhancements, or fork and create pull requests.
-
