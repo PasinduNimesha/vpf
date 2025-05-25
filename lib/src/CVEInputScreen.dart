@@ -49,7 +49,7 @@ class _CVEInputScreenState extends State<CVEInputScreen> {
       final cvssResponse = await http.get(Uri.parse('https://vulnerability.circl.lu/api/cve/$cveCode'));
       if (cvssResponse.statusCode != 200) throw Exception('Failed to load CVSS data');
       final cvssData = json.decode(cvssResponse.body);
-      final cvssScore = cvssData['containers']['cna']['metrics'][0]['cvssV4_0']['baseScore'];
+      final cvssScore = cvssData['containers']['cna']['metrics'][0]['cvssV3_1']['baseScore'];
       print('CVSS score: $cvssScore');
 
 
